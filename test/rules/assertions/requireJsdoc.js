@@ -38,12 +38,12 @@ export default {
         message: 'Missing JSDoc comment.',
         type: 'FunctionExpression'
       }],
-      options: [{
+      settings: {
         require: {
           ClassDeclaration: true,
           MethodDefinition: true
         }
-      }],
+      },
       parserOptions: {
         ecmaVersion: 6
       }

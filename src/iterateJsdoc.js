@@ -30,6 +30,7 @@ const curryUtils = (
   additionalTagNames,
   baseConfig,
   configFile,
+  options,
   captionRequired,
   matchingFileName,
   eslintrcForExamples,
@@ -108,6 +109,10 @@ const curryUtils = (
     return configFile;
   };
 
+  utils.getOptions = () => {
+    return options;
+  };
+
   utils.isCaptionRequired = () => {
     return captionRequired;
   };
@@ -161,6 +166,7 @@ export default (iterator) => {
     const additionalTagNames = _.get(context, 'settings.jsdoc.additionalTagNames') || {};
     const baseConfig = _.get(context, 'settings.jsdoc.baseConfig') || {};
     const configFile = _.get(context, 'settings.jsdoc.configFile');
+    const options = _.get(context, 'settings.jsdoc.options');
     const eslintrcForExamples = _.get(context, 'settings.jsdoc.eslintrcForExamples') !== false;
     const allowInlineConfig = _.get(context, 'settings.jsdoc.allowInlineConfig') !== false;
     const reportUnusedDisableDirectives = _.get(context, 'settings.jsdoc.reportUnusedDisableDirectives') !== false;
@@ -225,6 +231,7 @@ export default (iterator) => {
         additionalTagNames,
         baseConfig,
         configFile,
+        options,
         captionRequired,
         matchingFileName,
         eslintrcForExamples,

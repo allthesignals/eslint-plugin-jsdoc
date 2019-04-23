@@ -1,3 +1,5 @@
+import iterateJsdoc from '../iterateJsdoc';
+
 const OPTIONS_SCHEMA = {
   additionalProperties: false,
   properties: {
@@ -71,7 +73,8 @@ const checkJsDoc = (context, node) => {
   });
 };
 
-export default {
+export default iterateJsdoc(() => {
+  return {
   /**
    * The entrypoint for the JSDoc rule.
    *
@@ -81,76 +84,77 @@ export default {
    * @returns {*}
    *   a list with parser callback function.
    */
-  create (context) {
-    const options = getOptions(context);
+    create (context) {
+      const options = getOptions(context);
 
-    return {
-      ArrowFunctionExpression: (node) => {
-        if (!options.ArrowFunctionExpression) {
-          return;
-        }
+      return {
+        ArrowFunctionExpression: (node) => {
+          if (!options.ArrowFunctionExpression) {
+            return;
+          }
 
-        if (node.parent.type !== 'VariableDeclarator') {
-          return;
-        }
+          if (node.parent.type !== 'VariableDeclarator') {
+            return;
+          }
 
-        checkJsDoc(context, node);
-      },
-
-      ClassDeclaration: (node) => {
-        if (!options.ClassDeclaration) {
-          return;
-        }
-
-        checkJsDoc(context, node);
-      },
-
-      FunctionDeclaration: (node) => {
-        if (!options.FunctionDeclaration) {
-          return;
-        }
-
-        checkJsDoc(context, node);
-      },
-
-      FunctionExpression: (node) => {
-        if (options.MethodDefinition && node.parent.type === 'MethodDefinition') {
           checkJsDoc(context, node);
+        },
 
-          return;
-        }
+        ClassDeclaration: (node) => {
+          if (!options.ClassDeclaration) {
+            return;
+          }
 
-        if (!options.FunctionExpression) {
-          return;
-        }
-
-        if (node.parent.type === 'VariableDeclarator') {
           checkJsDoc(context, node);
-        }
+        },
 
-        if (node.parent.type === 'Property' && node === node.parent.value) {
+        FunctionDeclaration: (node) => {
+          if (!options.FunctionDeclaration) {
+            return;
+          }
+
           checkJsDoc(context, node);
-        }
-      }
-    };
-  },
+        },
 
-  meta: {
-    doc: {
-      category: 'Stylistic Issues',
-      description: 'Require JSDoc comments',
-      recommended: 'true',
-      url: 'https://github.com/gajus/eslint-plugin-jsdoc'
+        FunctionExpression: (node) => {
+          if (options.MethodDefinition && node.parent.type === 'MethodDefinition') {
+            checkJsDoc(context, node);
+
+            return;
+          }
+
+          if (!options.FunctionExpression) {
+            return;
+          }
+
+          if (node.parent.type === 'VariableDeclarator') {
+            checkJsDoc(context, node);
+          }
+
+          if (node.parent.type === 'Property' && node === node.parent.value) {
+            checkJsDoc(context, node);
+          }
+        }
+      };
     },
 
-    messages: {
-      missingJsDoc: 'Missing JSDoc comment.'
-    },
+    meta: {
+      doc: {
+        category: 'Stylistic Issues',
+        description: 'Require JSDoc comments',
+        recommended: 'true',
+        url: 'https://github.com/gajus/eslint-plugin-jsdoc'
+      },
 
-    schema: [
-      OPTIONS_SCHEMA
-    ],
+      messages: {
+        missingJsDoc: 'Missing JSDoc comment.'
+      },
 
-    type: 'suggestion'
-  }
-};
+      schema: [
+        OPTIONS_SCHEMA
+      ],
+
+      type: 'suggestion'
+    }
+  };
+});
